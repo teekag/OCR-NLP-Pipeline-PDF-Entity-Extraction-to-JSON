@@ -1,0 +1,46 @@
++------------------+     +------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |     |                  |
+|  Document Input  |---->|  OCR Processing  |---->|  NLP Processing  |---->| Entity Extraction|
+|  (PDF/Image)     |     |  (Text Extraction)|     |  (Text Cleaning) |     |  (Named Entities)|
+|                  |     |                  |     |                  |     |                  |
++------------------+     +------------------+     +------------------+     +------------------+
+                                                                                    |
+                                                                                    v
+                                                                          +------------------+
+                                                                          |                  |
+                                                                          |   JSON Output    |
+                                                                          |  (Structured Data)|
+                                                                          |                  |
+                                                                          +------------------+
+
+OCR-NLP Pipeline Architecture
+============================
+
+1. Document Input
+   - PDF documents
+   - Scanned images
+   - Forms, invoices, contracts
+
+2. OCR Processing
+   - Tesseract OCR
+   - EasyOCR
+   - Image preprocessing
+   - Text extraction
+
+3. NLP Processing
+   - Text cleaning
+   - Normalization
+   - Sentence segmentation
+   - Layout analysis
+
+4. Entity Extraction
+   - spaCy NER
+   - Flair sequence labeling
+   - Transformers models
+   - Custom pattern matching
+
+5. JSON Output
+   - Structured entities
+   - Document metadata
+   - Confidence scores
+   - Processing statistics

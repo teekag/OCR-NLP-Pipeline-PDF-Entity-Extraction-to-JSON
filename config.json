@@ -1,0 +1,46 @@
+{
+  "ocr": {
+    "engine": "tesseract",
+    "params": {
+      "lang": "eng",
+      "config": "--psm 3"
+    },
+    "dpi": 300,
+    "preprocess": true
+  },
+  "nlp": {
+    "language": "en",
+    "clean_text": true,
+    "remove_stopwords": false
+  },
+  "entity_extraction": {
+    "extractors": [
+      {
+        "type": "spacy",
+        "params": {
+          "model_name": "en_core_web_sm"
+        }
+      },
+      {
+        "type": "custom",
+        "params": {
+          "patterns": {
+            "EMAIL": ["\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"],
+            "PHONE": ["\\+?[\\d\\-\\(\\)\\s]{10,20}"],
+            "URL": ["https?://(?:[-\\w.]|(?:%[\\da-fA-F]{2}))+"],
+            "INVOICE_NUMBER": ["(?:Invoice|INV)\\s*#?\\s*(\\d+)", "#\\s*(\\d+)"],
+            "DATE": ["\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}", "\\d{4}[/-]\\d{1,2}[/-]\\d{1,2}"],
+            "AMOUNT": ["\\$\\s*[\\d,]+\\.?\\d*", "USD\\s*[\\d,]+\\.?\\d*"]
+          }
+        }
+      }
+    ],
+    "priority_order": ["custom_rule", "custom_pattern", "transformers", "flair", "spacy"]
+  },
+  "output": {
+    "format": "json",
+    "include_confidence": true,
+    "include_position": true,
+    "include_metadata": true
+  }
+}

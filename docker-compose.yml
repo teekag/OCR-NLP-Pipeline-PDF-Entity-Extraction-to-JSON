@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  ocr-nlp-pipeline:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./config.json:/app/config.json
+    command: python run_pipeline.py --batch data/raw outputs
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Uncomment to use a specific config file
+    # command: python run_pipeline.py --batch data/raw outputs --config config.json

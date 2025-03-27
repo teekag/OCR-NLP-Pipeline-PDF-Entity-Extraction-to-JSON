@@ -1,0 +1,81 @@
++------------------+     +------------------+     +------------------+     +------------------+
+|                  |     |                  |     |                  |     |                  |
+|  Document Input  |---->|  OCR Processing  |---->|  NLP Processing  |---->| Entity Extraction|
+|  (PDF/Image)     |     |  (Text Extraction)|     |  (Text Cleaning) |     |  (Named Entities)|
+|                  |     |                  |     |                  |     |                  |
++------------------+     +------------------+     +------------------+     +------------------+
+                                                                                    |
+                                                                                    v
+                                                                          +------------------+
+                                                                          |                  |
+                                                                          |   JSON Output    |
+                                                                          |  (Structured Data)|
+                                                                          |                  |
+                                                                          +------------------+
+
+OCR-NLP Pipeline: Detailed Component Flow
+=========================================
+
+1. Document Input
+   ├── PDF documents (multi-page)
+   ├── Scanned images (PNG, JPG, TIFF)
+   └── Forms, invoices, contracts, reports
+
+2. OCR Processing
+   ├── Engine Selection
+   │   ├── Tesseract OCR (default)
+   │   └── EasyOCR (alternative)
+   ├── Image Preprocessing
+   │   ├── Grayscale conversion
+   │   ├── Noise reduction
+   │   ├── Thresholding
+   │   └── Contrast enhancement
+   └── Text Extraction
+       ├── Page segmentation
+       ├── Character recognition
+       └── Layout preservation
+
+3. NLP Processing
+   ├── Text Cleaning
+   │   ├── OCR error correction
+   │   ├── Whitespace normalization
+   │   └── Special character handling
+   ├── Text Normalization
+   │   ├── Case normalization
+   │   ├── Stopword removal (optional)
+   │   └── Punctuation handling
+   └── Structure Analysis
+       ├── Sentence segmentation
+       ├── Paragraph detection
+       ├── Table recognition
+       └── List identification
+
+4. Entity Extraction
+   ├── Engine Selection
+   │   ├── spaCy (general entities)
+   │   ├── Flair (sequence labeling)
+   │   ├── Transformers (deep learning)
+   │   └── Custom patterns (domain-specific)
+   ├── Entity Types
+   │   ├── Standard NER (PER, ORG, LOC, etc.)
+   │   ├── Document-specific (INVOICE_NUMBER, DATE, etc.)
+   │   └── Custom entities (defined in config)
+   └── Entity Merging
+       ├── Overlap resolution
+       ├── Priority-based selection
+       └── Confidence scoring
+
+5. JSON Output
+   ├── Document Metadata
+   │   ├── Filename, type, size
+   │   ├── Page count
+   │   └── Processing timestamps
+   ├── Extracted Entities
+   │   ├── Text content
+   │   ├── Entity type/label
+   │   ├── Position information
+   │   └── Confidence scores
+   └── Processing Statistics
+       ├── Word/sentence counts
+       ├── Entity counts by type
+       └── Processing times
