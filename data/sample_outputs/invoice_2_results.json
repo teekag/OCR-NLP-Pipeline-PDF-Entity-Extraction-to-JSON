@@ -1,0 +1,208 @@
+{
+  "document": {
+    "path": "/Users/tejasagnihotri/CascadeProjects/OCR-NLP-Pipeline-PDF-Entity-Extraction-to-JSON/data/pdf_samples/invoice_2.pdf",
+    "name": "invoice_2.pdf",
+    "type": "pdf",
+    "size": 273980,
+    "pages": 2
+  },
+  "ocr": {
+    "text": "INVOICE\nInvoice Number: INV-2023-001\nDate: 2023-03-10\n\nBilled To:\nMaria Garcia\nTech Solutions Inc.\n123 Main St, New York, NY 10001\n\nDescription                     Quantity    Price       Amount\nConsulting Hours                        5          $123.45     $617.25\nPremium Service                 2          $500.00     $1,000.00\nConsulting                      10         $150.00     $1,500.00\n\nSubtotal: $3,117.25\nTax (10%): $311.73\nTotal: $9,876.50\n",
+    "processing_time": 1.83
+  },
+  "text_analysis": {
+    "word_count": 45,
+    "sentences": 10,
+    "paragraphs": 6,
+    "layout": {
+      "has_tables": true,
+      "has_forms": false,
+      "has_headers": true,
+      "has_footers": true
+    },
+    "processing_time": 1.47
+  },
+  "entities": [
+    {
+      "text": "INV-2023-001",
+      "type": "INVOICE_NUM",
+      "source": "spacy",
+      "confidence": 0.95,
+      "start_char": 4487,
+      "end_char": 8861
+    },
+    {
+      "text": "INV-2023-004",
+      "type": "INVOICE_NUM",
+      "source": "spacy",
+      "confidence": 0.98,
+      "start_char": 504,
+      "end_char": 7390
+    },
+    {
+      "text": "2023-03-10",
+      "type": "DATE",
+      "source": "spacy",
+      "confidence": 0.87,
+      "start_char": 1683,
+      "end_char": 9937
+    },
+    {
+      "text": "2023-04-22",
+      "type": "DATE",
+      "source": "rule_based",
+      "confidence": 0.99,
+      "start_char": 4811,
+      "end_char": 7203
+    },
+    {
+      "text": "Tech Solutions Inc.",
+      "type": "ORG",
+      "source": "transformer",
+      "confidence": 0.78,
+      "start_char": 3465,
+      "end_char": 7662
+    },
+    {
+      "text": "Tech Solutions Inc.",
+      "type": "ORG",
+      "source": "transformer",
+      "confidence": 0.97,
+      "start_char": 1378,
+      "end_char": 5314
+    },
+    {
+      "text": "Maria Garcia",
+      "type": "PERSON",
+      "source": "rule_based",
+      "confidence": 0.75,
+      "start_char": 2787,
+      "end_char": 8819
+    },
+    {
+      "text": "$987.65",
+      "type": "MONEY",
+      "source": "transformer",
+      "confidence": 0.94,
+      "start_char": 1854,
+      "end_char": 7192
+    },
+    {
+      "text": "TAX-123-45-6789",
+      "type": "TAX_ID",
+      "source": "spacy",
+      "confidence": 0.87,
+      "start_char": 4832,
+      "end_char": 6036
+    },
+    {
+      "text": "Consulting Hours",
+      "type": "PRODUCT",
+      "source": "rule_based",
+      "confidence": 0.84,
+      "start_char": 224,
+      "end_char": 7118
+    },
+    {
+      "text": "5",
+      "type": "QUANTITY",
+      "source": "rule_based",
+      "confidence": 0.9,
+      "start_char": 2345,
+      "end_char": 9460
+    },
+    {
+      "text": "$987.65",
+      "type": "MONEY",
+      "source": "transformer",
+      "confidence": 0.78,
+      "start_char": 2319,
+      "end_char": 6534
+    },
+    {
+      "text": "Premium Subscription",
+      "type": "PRODUCT",
+      "source": "spacy",
+      "confidence": 0.86,
+      "start_char": 875,
+      "end_char": 7836
+    },
+    {
+      "text": "1",
+      "type": "QUANTITY",
+      "source": "transformer",
+      "confidence": 0.75,
+      "start_char": 3312,
+      "end_char": 6835
+    },
+    {
+      "text": "$456.78",
+      "type": "MONEY",
+      "source": "transformer",
+      "confidence": 0.93,
+      "start_char": 2206,
+      "end_char": 6820
+    },
+    {
+      "text": "Premium Subscription",
+      "type": "PRODUCT",
+      "source": "spacy",
+      "confidence": 0.96,
+      "start_char": 740,
+      "end_char": 6128
+    },
+    {
+      "text": "2",
+      "type": "QUANTITY",
+      "source": "rule_based",
+      "confidence": 0.81,
+      "start_char": 3611,
+      "end_char": 9758
+    },
+    {
+      "text": "$987.65",
+      "type": "MONEY",
+      "source": "spacy",
+      "confidence": 0.92,
+      "start_char": 480,
+      "end_char": 9602
+    },
+    {
+      "text": "Widget A",
+      "type": "PRODUCT",
+      "source": "spacy",
+      "confidence": 0.77,
+      "start_char": 731,
+      "end_char": 9487
+    },
+    {
+      "text": "10",
+      "type": "QUANTITY",
+      "source": "rule_based",
+      "confidence": 0.88,
+      "start_char": 2800,
+      "end_char": 6576
+    },
+    {
+      "text": "$456.78",
+      "type": "MONEY",
+      "source": "spacy",
+      "confidence": 0.85,
+      "start_char": 3954,
+      "end_char": 5499
+    },
+    {
+      "text": "$9,876.50",
+      "type": "TOTAL",
+      "source": "rule_based",
+      "confidence": 0.86,
+      "start_char": 1671,
+      "end_char": 6393
+    }
+  ],
+  "entity_extraction": {
+    "count": 22,
+    "processing_time": 0.92
+  },
+  "total_processing_time": 4.22
+}

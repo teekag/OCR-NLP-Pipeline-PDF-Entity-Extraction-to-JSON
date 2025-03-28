@@ -1,0 +1,176 @@
+{
+  "document": {
+    "path": "/Users/tejasagnihotri/CascadeProjects/OCR-NLP-Pipeline-PDF-Entity-Extraction-to-JSON/data/pdf_samples/invoice_1.pdf",
+    "name": "invoice_1.pdf",
+    "type": "pdf",
+    "size": 274006,
+    "pages": 1
+  },
+  "ocr": {
+    "text": "INVOICE\nInvoice Number: INV-2023-001\nDate: 2023-02-28\n\nBilled To:\nMaria Garcia\nGlobal Industries Ltd.\n123 Main St, New York, NY 10001\n\nDescription                     Quantity    Price       Amount\nPremium Subscription                        5          $123.45     $617.25\nPremium Service                 2          $500.00     $1,000.00\nConsulting                      10         $150.00     $1,500.00\n\nSubtotal: $3,117.25\nTax (10%): $311.73\nTotal: $456.78\n",
+    "processing_time": 1.7
+  },
+  "text_analysis": {
+    "word_count": 45,
+    "sentences": 17,
+    "paragraphs": 9,
+    "layout": {
+      "has_tables": true,
+      "has_forms": false,
+      "has_headers": true,
+      "has_footers": true
+    },
+    "processing_time": 1.22
+  },
+  "entities": [
+    {
+      "text": "INV-2023-001",
+      "type": "INVOICE_NUM",
+      "source": "rule_based",
+      "confidence": 0.88,
+      "start_char": 4419,
+      "end_char": 8202
+    },
+    {
+      "text": "2023-02-28",
+      "type": "DATE",
+      "source": "rule_based",
+      "confidence": 0.96,
+      "start_char": 3702,
+      "end_char": 9258
+    },
+    {
+      "text": "2023-03-10",
+      "type": "DATE",
+      "source": "transformer",
+      "confidence": 0.81,
+      "start_char": 878,
+      "end_char": 8817
+    },
+    {
+      "text": "Global Industries Ltd.",
+      "type": "ORG",
+      "source": "transformer",
+      "confidence": 0.95,
+      "start_char": 3097,
+      "end_char": 7576
+    },
+    {
+      "text": "Tech Solutions Inc.",
+      "type": "ORG",
+      "source": "spacy",
+      "confidence": 0.86,
+      "start_char": 3364,
+      "end_char": 7741
+    },
+    {
+      "text": "Maria Garcia",
+      "type": "PERSON",
+      "source": "spacy",
+      "confidence": 0.86,
+      "start_char": 4932,
+      "end_char": 8291
+    },
+    {
+      "text": "$456.78",
+      "type": "MONEY",
+      "source": "transformer",
+      "confidence": 0.99,
+      "start_char": 2132,
+      "end_char": 5680
+    },
+    {
+      "text": "TAX-987-65-4321",
+      "type": "TAX_ID",
+      "source": "rule_based",
+      "confidence": 0.81,
+      "start_char": 2392,
+      "end_char": 9422
+    },
+    {
+      "text": "Premium Subscription",
+      "type": "PRODUCT",
+      "source": "rule_based",
+      "confidence": 0.85,
+      "start_char": 2579,
+      "end_char": 8245
+    },
+    {
+      "text": "5",
+      "type": "QUANTITY",
+      "source": "transformer",
+      "confidence": 0.92,
+      "start_char": 3323,
+      "end_char": 9420
+    },
+    {
+      "text": "$987.65",
+      "type": "MONEY",
+      "source": "transformer",
+      "confidence": 0.9,
+      "start_char": 2923,
+      "end_char": 9976
+    },
+    {
+      "text": "Premium Subscription",
+      "type": "PRODUCT",
+      "source": "spacy",
+      "confidence": 0.84,
+      "start_char": 4934,
+      "end_char": 9752
+    },
+    {
+      "text": "5",
+      "type": "QUANTITY",
+      "source": "rule_based",
+      "confidence": 0.9,
+      "start_char": 2432,
+      "end_char": 7128
+    },
+    {
+      "text": "$2,345.67",
+      "type": "MONEY",
+      "source": "spacy",
+      "confidence": 0.79,
+      "start_char": 2992,
+      "end_char": 7387
+    },
+    {
+      "text": "Widget A",
+      "type": "PRODUCT",
+      "source": "transformer",
+      "confidence": 0.9,
+      "start_char": 1630,
+      "end_char": 8128
+    },
+    {
+      "text": "5",
+      "type": "QUANTITY",
+      "source": "rule_based",
+      "confidence": 0.76,
+      "start_char": 2194,
+      "end_char": 7924
+    },
+    {
+      "text": "$456.78",
+      "type": "MONEY",
+      "source": "rule_based",
+      "confidence": 0.79,
+      "start_char": 4354,
+      "end_char": 6197
+    },
+    {
+      "text": "$456.78",
+      "type": "TOTAL",
+      "source": "transformer",
+      "confidence": 0.98,
+      "start_char": 4782,
+      "end_char": 9752
+    }
+  ],
+  "entity_extraction": {
+    "count": 18,
+    "processing_time": 1.07
+  },
+  "total_processing_time": 3.99
+}

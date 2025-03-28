@@ -33,20 +33,31 @@ The pipeline is designed to be modular, extensible, and suitable for processing 
 ```
 ocr-nlp-pipeline/
 ├── data/
-│   ├── raw/                # Original scanned PDFs or images
-│   ├── processed/          # OCR-cleaned and structured text
-│   └── samples/            # Sample documents and expected outputs
+│   ├── pdf_samples/         # Sample PDFs for testing and demo
+│   ├── sample_outputs/      # Pre-processed sample outputs
+│   ├── raw/                 # Original scanned PDFs or images
+│   └── processed/           # OCR-cleaned and structured text
+├── diagrams/                # Architecture diagrams and visualizations
+│   └── pipeline_architecture.png  # Visual representation of the pipeline
+├── docs/                    # Auto-generated API documentation
+├── notebooks/
+│   └── 01_pipeline_walkthrough.ipynb  # Interactive pipeline tutorial
+├── scripts/
+│   ├── download_sample_pdfs.py    # Script to download sample PDFs
+│   ├── generate_sample_outputs.py # Script to generate sample outputs
+│   ├── generate_docs.py           # Script to generate API documentation
+│   └── visualize_extraction.py    # Script to visualize extracted entities
 ├── src/
 │   ├── ocr_engine.py       # Tesseract or EasyOCR integration
 │   ├── nlp_parser.py       # NLP preprocessing logic
 │   ├── entity_extractor.py # NER using spaCy, Flair, or transformers
 │   └── pipeline.py         # End-to-end document processing orchestration
-├── notebooks/
-│   ├── 01_data_ingestion.ipynb   # Visual demo of OCR and text cleaning
-│   └── 02_pipeline_demo.ipynb    # Pipeline from PDF to JSON
-├── outputs/                # Final structured outputs (e.g., JSON files)
-├── diagrams/               # Dataflow, pipeline architecture, or model visuals
 ├── tests/                  # Unit and integration tests
+│   ├── test_pipeline.py    # Tests for pipeline components
+│   └── test_demo.py        # Tests for demo functionality
+├── outputs/                # Final structured outputs (e.g., JSON files)
+├── demo.py                 # Standalone demo script
+├── run_pipeline.py         # CLI tool for running the pipeline
 ├── README.md               # This documentation
 └── requirements.txt        # All Python dependencies
 ```
@@ -80,6 +91,168 @@ ocr-nlp-pipeline/
    - **macOS**: `brew install tesseract`
    - **Windows**: Download installer from [GitHub](https://github.com/UB-Mannheim/tesseract/wiki)
 
+## Quick Demo
+
+The repository includes a standalone demo that showcases the pipeline's capabilities using pre-processed sample documents. This allows you to see the pipeline in action without requiring all dependencies to be installed.
+
+### Setting up the Demo
+
+1. Download sample PDFs:
+   ```bash
+   python scripts/download_sample_pdfs.py
+   ```
+
+2. Generate sample outputs:
+   ```bash
+   python scripts/generate_sample_outputs.py
+   ```
+
+3. Run the demo:
+   ```bash
+   python demo.py
+   ```
+
+   To run the demo for a specific sample:
+   ```bash
+   python demo.py invoice_1
+   ```
+
+### Terminal Output Example
+
+When you run the demo, you'll see output similar to this:
+
+```
+OCR-NLP Pipeline Demo
+=====================
+
+Available sample documents:
+1. invoice_1.pdf (Invoice)
+2. invoice_2.pdf (Invoice)
+3. form_uscis.pdf (Government Form)
+
+Loading sample: invoice_1.pdf
+
+Document Information:
+- Filename: invoice_1.pdf
+- Type: Invoice
+- Pages: 1
+
+OCR Text Sample:
+--------------
+INVOICE #1234
+Date: 01/15/2023
+Vendor: ABC Supplies Inc.
+Customer: XYZ Corporation
+
+Item         Quantity    Price      Total
+Widget A     5           $10.00     $50.00
+Widget B     3           $15.00     $45.00
+...
+
+Extracted Entities:
+-----------------
+INVOICE_NUM (1):
+  - 1234 (confidence: 0.95)
+
+DATE (1):
+  - 01/15/2023 (confidence: 0.92)
+
+ORG (2):
+  - ABC Supplies Inc. (confidence: 0.89)
+  - XYZ Corporation (confidence: 0.87)
+
+MONEY (3):
+  - $10.00 (confidence: 0.98)
+  - $15.00 (confidence: 0.97)
+  - $95.00 (confidence: 0.99)
+
+Processing completed in 0.35 seconds
+```
+
+### Sample JSON Output
+
+The pipeline generates structured JSON output like this:
+
+```json
+{
+  "document": {
+    "filename": "invoice_1.pdf",
+    "type": "Invoice",
+    "pages": 1,
+    "processed_date": "2025-03-28T09:30:15"
+  },
+  "ocr": {
+    "engine": "tesseract",
+    "version": "4.1.1",
+    "text": "INVOICE #1234\nDate: 01/15/2023\nVendor: ABC Supplies Inc.\nCustomer: XYZ Corporation\n\nItem         Quantity    Price      Total\nWidget A     5           $10.00     $50.00\nWidget B     3           $15.00     $45.00\n\nSubtotal: $95.00\nTax (10%): $9.50\nTotal: $104.50",
+    "confidence": 0.92
+  },
+  "entities": [
+    {
+      "text": "1234",
+      "type": "INVOICE_NUM",
+      "confidence": 0.95,
+      "position": {
+        "page": 1,
+        "bbox": [120, 50, 160, 65]
+      }
+    },
+    {
+      "text": "01/15/2023",
+      "type": "DATE",
+      "confidence": 0.92,
+      "position": {
+        "page": 1,
+        "bbox": [50, 80, 120, 95]
+      }
+    },
+    {
+      "text": "ABC Supplies Inc.",
+      "type": "ORG",
+      "confidence": 0.89,
+      "position": {
+        "page": 1,
+        "bbox": [70, 110, 180, 125]
+      }
+    },
+    {
+      "text": "$104.50",
+      "type": "TOTAL",
+      "confidence": 0.99,
+      "position": {
+        "page": 1,
+        "bbox": [80, 350, 130, 365]
+      }
+    }
+  ],
+  "text_analysis": {
+    "word_count": 48,
+    "sentence_count": 5,
+    "table_count": 1
+  },
+  "processing_time": 0.35
+}
+```
+
+### Sample Data
+
+The demo includes the following sample documents:
+
+- **invoice_1.pdf**: A sample invoice with line items, amounts, and vendor information
+- **invoice_2.pdf**: Another sample invoice with different structure
+- **form_uscis.pdf**: A government form with fillable fields
+
+### Demo Output
+
+The demo will display the following information for each sample document:
+
+- Document metadata (name, type, pages)
+- OCR text sample
+- Text analysis (word count, sentences, paragraphs)
+- Layout analysis (tables, forms, headers, footers)
+- Extracted entities grouped by type
+- Processing times for each stage
+
 ## Usage
 
 ### Basic Usage
@@ -93,13 +266,31 @@ pipeline = PipelineBuilder().build()
 
 # Process a single document
 result = pipeline.process_document(
-    "data/samples/invoice.pdf",
+    "data/pdf_samples/invoice_1.pdf",
     output_dir="outputs"
 )
 
 # Access extracted entities
 for entity in result['entities']:
-    print(f"{entity['text']} ({entity['label']})")
+    print(f"{entity['text']} ({entity['type']})")
+```
+
+### Command-Line Interface
+
+The pipeline can also be run from the command line:
+
+```bash
+# Process a single document
+python run_pipeline.py data/pdf_samples/invoice_1.pdf outputs/
+
+# Process all documents in a directory
+python run_pipeline.py --batch data/pdf_samples/ outputs/
+
+# Run the demo mode
+python run_pipeline.py --demo
+
+# Run the demo for a specific sample
+python run_pipeline.py --demo invoice_1
 ```
 
 ### Custom Pipeline Configuration
@@ -121,9 +312,9 @@ pipeline = (
 
 # Process a batch of documents
 document_paths = [
-    "data/samples/invoice1.pdf",
-    "data/samples/contract.pdf",
-    "data/samples/receipt.jpg"
+    "data/pdf_samples/invoice_1.pdf",
+    "data/pdf_samples/invoice_2.pdf",
+    "data/pdf_samples/form_uscis.pdf"
 ]
 
 results = pipeline.process_batch(
@@ -134,66 +325,123 @@ results = pipeline.process_batch(
 )
 ```
 
+## Documentation
+
+### Architecture
+
+The OCR-NLP Pipeline follows a modular architecture that allows for easy extension and customization:
+
+![Pipeline Architecture](diagrams/pipeline_architecture.png)
+
+The pipeline consists of the following main components:
+- **OCR Engine**: Extracts text from PDF/image documents
+- **Text Preprocessing**: Cleans and normalizes the extracted text
+- **Layout Analysis**: Analyzes document structure and layout
+- **Entity Extraction**: Identifies and extracts structured information
+- **Output Generation**: Formats results into structured JSON
+
+### API Documentation
+
+The project includes comprehensive API documentation generated from docstrings using pdoc. To generate the documentation:
+
+```bash
+python scripts/generate_docs.py
+```
+
+This will create HTML documentation in the `docs` directory that you can view in your browser.
+
+### Interactive Notebook
+
+For a more interactive exploration of the pipeline, check out the Jupyter notebook:
+
+```bash
+jupyter notebook notebooks/01_pipeline_walkthrough.ipynb
+```
+
+This notebook provides a step-by-step walkthrough of the pipeline's functionality, from loading documents to analyzing extracted entities.
+
+### Visualization
+
+The project includes a script to visualize extracted entities on the original PDF:
+
+```bash
+python scripts/visualize_extraction.py data/pdf_samples/invoice_1.pdf data/sample_outputs/invoice_1_results.json
+```
+
+This creates a highlighted PDF showing the extracted entities and their positions in the document.
+
+## Testing
+
+The project includes unit tests to ensure reliability and correctness. To run the tests:
+
+```bash
+pytest tests/
+```
+
+The tests cover:
+- Pipeline components and configuration
+- Text preprocessing functionality
+- Entity extraction accuracy
+- Demo script functionality
+
 ## Example Output
 
 ```json
 {
   "document": {
-    "path": "data/samples/invoice.pdf",
-    "name": "invoice.pdf",
+    "path": "data/pdf_samples/invoice_1.pdf",
+    "name": "invoice_1.pdf",
     "type": "pdf",
     "size": 245678,
-    "pages": 2
+    "pages": 1
   },
   "ocr": {
-    "text": "Invoice #12345\nDate: 2023-03-21\nVendor: Acme Corp\n...",
-    "processing_time": 1.25
+    "text": "INVOICE\nInvoice Number: INV-2023-001\nDate: 2023-02-28\n\nBilled To:\nMaria Garcia\nGlobal Industries Ltd.\n123 Main St, New York, NY 10001\n...",
+    "processing_time": 1.70
   },
   "text_analysis": {
-    "word_count": 156,
-    "sentences": 12,
-    "paragraphs": 5,
+    "word_count": 45,
+    "sentences": 17,
+    "paragraphs": 9,
     "layout": {
-      "tables": [
-        {
-          "start_line": 10,
-          "end_line": 15,
-          "content": "Item    Quantity    Price\nWidget A    5    $10.00\n..."
-        }
-      ],
-      "lists": [],
-      "structure": "tabular"
+      "has_tables": true,
+      "has_forms": false,
+      "has_headers": true,
+      "has_footers": true
     },
-    "processing_time": 0.35
+    "processing_time": 1.22
   },
   "entities": [
     {
-      "text": "12345",
-      "label": "INVOICE_NUMBER",
-      "start_char": 8,
-      "end_char": 13,
-      "source": "custom_pattern"
+      "text": "INV-2023-001",
+      "type": "INVOICE_NUM",
+      "source": "rule_based",
+      "confidence": 0.88,
+      "start_char": 1234,
+      "end_char": 1245
     },
     {
-      "text": "2023-03-21",
-      "label": "DATE",
-      "start_char": 20,
-      "end_char": 30,
-      "source": "custom_pattern"
+      "text": "2023-02-28",
+      "type": "DATE",
+      "source": "spacy",
+      "confidence": 0.96,
+      "start_char": 1260,
+      "end_char": 1270
     },
     {
-      "text": "Acme Corp",
-      "label": "ORG",
-      "start_char": 38,
-      "end_char": 47,
-      "source": "spacy"
+      "text": "Maria Garcia",
+      "type": "PERSON",
+      "source": "spacy",
+      "confidence": 0.86,
+      "start_char": 1290,
+      "end_char": 1302
     }
   ],
   "entity_extraction": {
-    "count": 3,
-    "processing_time": 0.42
+    "count": 18,
+    "processing_time": 1.07
   },
-  "total_processing_time": 2.02
+  "total_processing_time": 3.99
 }
 ```
 
@@ -201,65 +449,80 @@ results = pipeline.process_batch(
 
 ### Adding Custom Entity Types
 
-Create a custom entity extractor with domain-specific patterns:
+You can extend the pipeline to recognize custom entity types by adding a custom entity extractor:
 
 ```python
-custom_patterns = {
-    'INVOICE_NUMBER': [r'Invoice\s+#?\s*(\d+)', r'INV\s*#?\s*(\d+)'],
-    'TOTAL_AMOUNT': [r'Total:?\s*\$?(\d+\.\d{2})'],
-    'CREDIT_CARD': [r'\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}']
-}
+from src.entity_extractor import EntityExtractorFactory, RegexEntityExtractor
 
+# Register a custom entity extractor
+EntityExtractorFactory.register_extractor(
+    'invoice_extractor',
+    lambda **kwargs: RegexEntityExtractor(
+        patterns={
+            'INVOICE_NUM': [r'INV-\d{4}-\d{3}'],
+            'TOTAL_AMOUNT': [r'Total:\s*\$[\d,]+\.\d{2}'],
+            'TAX_ID': [r'Tax ID:\s*\d{2}-\d{7}']
+        },
+        **kwargs
+    )
+)
+
+# Use the custom extractor in the pipeline
 pipeline = (
     PipelineBuilder()
-    .with_entity_extractor('custom', patterns=custom_patterns)
+    .with_entity_extractor('invoice_extractor')
     .build()
 )
 ```
 
 ### Implementing Custom Document Types
 
-For specialized document types, extend the pipeline with custom processing:
+For specialized document types, you can create custom document processors:
 
 ```python
-# Example for invoice processing
-class InvoiceProcessor:
-    def __init__(self, pipeline):
-        self.pipeline = pipeline
-    
-    def process_invoice(self, invoice_path):
-        # Extract basic entities
-        result = self.pipeline.process_document(invoice_path)
+from src.pipeline import Pipeline
+
+class InvoiceProcessor(Pipeline):
+    def __init__(self, config=None):
+        super().__init__(config)
         
-        # Extract invoice-specific information
+    def process_document(self, document_path, **kwargs):
+        # Get base processing result
+        result = super().process_document(document_path, **kwargs)
+        
+        # Add invoice-specific processing
+        invoice_data = self._extract_invoice_data(result)
+        result['invoice_data'] = invoice_data
+        
+        return result
+    
+    def _extract_invoice_data(self, result):
+        # Extract structured invoice data from entities
         invoice_data = {
-            'invoice_number': self._find_entity(result, 'INVOICE_NUMBER'),
-            'date': self._find_entity(result, 'DATE'),
-            'vendor': self._find_entity(result, 'ORG'),
-            'total_amount': self._find_entity(result, 'TOTAL_AMOUNT'),
-            'line_items': self._extract_line_items(result)
+            'invoice_number': None,
+            'date': None,
+            'vendor': None,
+            'total': None,
+            'line_items': []
         }
         
-        return invoice_data
-    
-    def _find_entity(self, result, entity_type):
+        # Fill in data from entities
         for entity in result['entities']:
-            if entity['label'] == entity_type:
-                return entity['text']
-        return None
-    
-    def _extract_line_items(self, result):
-        # Custom logic to extract line items from tables
-        # ...
-        return []
+            if entity['type'] == 'INVOICE_NUM':
+                invoice_data['invoice_number'] = entity['text']
+            elif entity['type'] == 'DATE':
+                invoice_data['date'] = entity['text']
+            # ... and so on
+            
+        return invoice_data
 ```
 
 ## Performance Considerations
 
-- **OCR Quality**: The quality of OCR significantly impacts downstream NLP tasks. Use high-resolution inputs when possible.
-- **Memory Usage**: Processing large documents may require significant memory. Consider chunking for very large documents.
-- **Processing Speed**: For batch processing of many documents, consider parallel processing.
-- **Model Size**: Larger NLP models provide better accuracy but require more resources. Choose models appropriate for your hardware.
+- **OCR Quality**: The quality of the input document significantly affects OCR accuracy. For best results, use high-resolution scans (300+ DPI).
+- **Memory Usage**: Processing large documents may require significant memory, especially when using transformer-based models.
+- **GPU Acceleration**: For batch processing, consider using GPU-accelerated OCR and NLP models.
+- **Preprocessing**: Enable image preprocessing for scanned documents to improve OCR accuracy.
 
 ## License
 

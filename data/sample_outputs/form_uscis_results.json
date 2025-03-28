@@ -1,0 +1,120 @@
+{
+  "document": {
+    "path": "/Users/tejasagnihotri/CascadeProjects/OCR-NLP-Pipeline-PDF-Entity-Extraction-to-JSON/data/pdf_samples/form_uscis.pdf",
+    "name": "form_uscis.pdf",
+    "type": "pdf",
+    "size": 530158,
+    "pages": 2
+  },
+  "ocr": {
+    "text": "EMPLOYMENT ELIGIBILITY VERIFICATION\nU.S. Department of Homeland Security\n\nEmployee Info (To be completed by employee)\nFull Name: John Smith\nAddress: 456 Oak Ave, Los Angeles, CA 90001\nDate of Birth: 2023-01-15\nSSN: TAX-123-45-6789\n\nEmployer Info (To be completed by employer)\nCompany Name: Global Industries Ltd.\nAddress: 789 Corporate Blvd, Business City, NY 12345\nDate: 2023-01-15\n",
+    "processing_time": 1.84
+  },
+  "text_analysis": {
+    "word_count": 55,
+    "sentences": 15,
+    "paragraphs": 10,
+    "layout": {
+      "has_tables": false,
+      "has_forms": true,
+      "has_headers": true,
+      "has_footers": false
+    },
+    "processing_time": 1.28
+  },
+  "entities": [
+    {
+      "text": "John Smith",
+      "type": "PERSON",
+      "source": "transformer",
+      "confidence": 0.81,
+      "start_char": 761,
+      "end_char": 5685
+    },
+    {
+      "text": "2023-01-15",
+      "type": "DATE",
+      "source": "rule_based",
+      "confidence": 0.77,
+      "start_char": 1415,
+      "end_char": 9738
+    },
+    {
+      "text": "2023-02-28",
+      "type": "DATE",
+      "source": "spacy",
+      "confidence": 0.99,
+      "start_char": 3636,
+      "end_char": 6342
+    },
+    {
+      "text": "456 Oak Ave, Los Angeles, CA 90001",
+      "type": "ADDRESS",
+      "source": "rule_based",
+      "confidence": 0.86,
+      "start_char": 1732,
+      "end_char": 7647
+    },
+    {
+      "text": "123 Main St, New York, NY 10001",
+      "type": "ADDRESS",
+      "source": "transformer",
+      "confidence": 0.77,
+      "start_char": 2047,
+      "end_char": 7486
+    },
+    {
+      "text": "Global Industries Ltd.",
+      "type": "ORG",
+      "source": "transformer",
+      "confidence": 0.92,
+      "start_char": 406,
+      "end_char": 9956
+    },
+    {
+      "text": "Global Industries Ltd.",
+      "type": "ORG",
+      "source": "rule_based",
+      "confidence": 0.77,
+      "start_char": 4520,
+      "end_char": 8782
+    },
+    {
+      "text": "Tech Solutions Inc.",
+      "type": "ORG",
+      "source": "transformer",
+      "confidence": 0.81,
+      "start_char": 3432,
+      "end_char": 6431
+    },
+    {
+      "text": "TAX-123-45-6789",
+      "type": "TAX_ID",
+      "source": "transformer",
+      "confidence": 0.79,
+      "start_char": 214,
+      "end_char": 7220
+    },
+    {
+      "text": "TAX-123-45-6789",
+      "type": "TAX_ID",
+      "source": "rule_based",
+      "confidence": 0.96,
+      "start_char": 3902,
+      "end_char": 8752
+    },
+    {
+      "text": "TAX-987-65-4321",
+      "type": "TAX_ID",
+      "source": "transformer",
+      "confidence": 0.94,
+      "start_char": 3975,
+      "end_char": 8013
+    }
+  ],
+  "entity_extraction": {
+    "count": 11,
+    "processing_time": 1.01
+  },
+  "total_processing_time": 4.13
+}
